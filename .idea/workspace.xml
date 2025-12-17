@@ -4,19 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ecf593f1-482d-43f3-8dd5-22c643449705" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/postgresql_42_7_8.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entity/CustomerDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/CustomerDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entity/OrderDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/OrderDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entity/ProductDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/ProductDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entity/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/UserDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/Menu.java" afterDir="false" />
+    <list default="true" id="ecf593f1-482d-43f3-8dd5-22c643449705" name="Changes" comment="utvecklat databas projektet mer med funktioner och liknannde">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +42,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
@@ -90,11 +80,23 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1765979868633</updated>
-      <workItem from="1765979869656" duration="12132000" />
+      <workItem from="1765979869656" duration="13046000" />
     </task>
+    <task id="LOCAL−00001" summary="utvecklat databas projektet mer med funktioner och liknannde">
+      <option name="closed" value="true" />
+      <created>1765994894481</created>
+      <option name="number" value="LOCAL−00001" />
+      <option name="presentableId" value="LOCAL−00001" />
+      <updated>1765994894481</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="utvecklat databas projektet mer med funktioner och liknannde" />
+    <option name="LAST_COMMIT_MESSAGE" value="utvecklat databas projektet mer med funktioner och liknannde" />
   </component>
 </project>
