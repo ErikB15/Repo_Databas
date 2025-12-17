@@ -4,25 +4,24 @@ import java.sql.*;
 
 public class CustomerDAO {
 
-    private Connection conn;
+    private static Connection conn;
 
     public CustomerDAO() throws SQLException {
         conn = Database.getConnection();
     }
 
-    public void showCustomerInfo(int customerID) throws SQLException {
-        String sql = "SELECT * FROM customer WHERE customerID = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, customerID);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            System.out.println("ID: " + rs.getInt("customerID"));
-            System.out.println("Name: " + rs.getString("first_name") + " " + rs.getString("last_name"));
-            System.out.println("Email: " + rs.getString("e_mail"));
-            System.out.println("Address: " + rs.getString("address") + ", " + rs.getString("city") + ", " + rs.getString("country"));
-            System.out.println("Phone: " + rs.getString("phonenumber"));
+    public static void showCustomerInfo(int customerID) throws SQLException {
+        String sql = "SELECT * FROM get_customer_info(?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+          ps.setInt(1, customerID);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {System.out.println("UserID: " + rs.getInt("out_customerID"));System.out.println("Name: " + rs.getString("out_first_name") + " " + rs.getString("out_last_name"));System.out.println("Email: " + rs.getString("out_email"));System.out.println("Address: " + rs.getString("out_address") + ", " + rs.getString("out_city") + ", " + rs.getString("out_country"));
+                    System.out.println("Phone: " + rs.getString("out_phonenumber"));
+                } else {
+                    System.out.println("Customer not found.");
+                }
+            }
         }
-        rs.close();
-        ps.close();
     }
+
 }

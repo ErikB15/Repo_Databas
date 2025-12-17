@@ -1,7 +1,6 @@
 package entity;
 
 import java.sql.*;
-import view.Menu;
 
 public class ProductDAO {
 
@@ -12,46 +11,77 @@ public class ProductDAO {
     }
 
     public void showAllProducts() throws SQLException {
-        String sql = "SELECT p.name, ps.price, ps.stock, ps.name_Supplier, p.article_number " + "FROM products p " + "JOIN productBySupplier ps ON p.article_number = ps.article_number";
+        String sql = "SELECT * FROM get_all_products()";
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            System.out.println(rs.getString("name") + ", " + "Price: " + rs.getInt("price") + ", " + "Available in stock: " + rs.getInt("stock") + ", " + "Supplier: " + rs.getString("name_Supplier") + ", " + "Article number: " + rs.getInt("article_number")
-            );
+            System.out.println(rs.getString("name") + ", " + "Price: " + rs.getInt("price") + ", " + "Available in stock: " + rs.getInt("stock") + ", " + "Supplier: " + rs.getString("supplier") + ", " + "Article number: " + rs.getInt("article_number"));
         }
-
         rs.close();
         ps.close();
     }
 
-
-    public void addProduct(String name, String articleNumber, int stock, int price, String supplier) throws SQLException {
-        String sql = "SELECT add_product(?)";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, name);
-        ps.execute();
-        ps.close();
+    public void addProduct(String productName, int stock, int price, int supplierID) throws SQLException {
+        String sql = "SELECT add_product(?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, productName);
+            ps.setInt(2, stock);
+            ps.setInt(3, price);
+            ps.setInt(4, supplierID);
+            ps.execute();
+        }
         System.out.println("Product added successfully!");
     }
 
+
+
     public void deleteProduct(int productID) throws SQLException {
-        String sql = "DELETE FROM products WHERE article_number = ? AND article_number NOT IN (SELECT article_number FROM productBySupplier)";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, productID);
-        int rows = ps.executeUpdate();
-        if (rows > 0) System.out.println("Product deleted successfully!");
-        else System.out.println("Cannot delete product, it may have been sold.");
-        ps.close();
+        String sql = "SELECT delete_product_safe(?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productID);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                boolean deleted = rs.getBoolean(1);
+                if (deleted) {
+                    System.out.println("Product deleted successfully!");
+                } else {
+                    System.out.println("Cannot delete product, it may have been sold.");
+                }
+            }
+            rs.close();
+        }
     }
 
+
     public void editQuantity(int productID, int newQuantity) throws SQLException {
-        String sql = "UPDATE productBySupplier SET stock = ? WHERE article_number = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, newQuantity);
-        ps.setInt(2, productID);
-        ps.executeUpdate();
-        ps.close();
-        System.out.println("Quantity updated successfully!");
+        String sql = "SELECT update_product_quantity(?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productID);
+            ps.setInt(2, newQuantity);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                boolean updated = rs.getBoolean(1);
+                System.out.println(updated ? "Quantity updated successfully!" : "Product not found.");
+            }
+            rs.close();
+        }
+    }
+
+
+    public void searchProducts(String searchTerm) {
+        String sql = "SELECT * FROM search_products(?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, searchTerm);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                System.out.println("Name: " + rs.getString("name") + ", Price: " + rs.getInt("price") + ", Stock: " + rs.getInt("stock") + ", Supplier: " + rs.getString("supplier") + ", " + "Article number: " + rs.getInt("article_number"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

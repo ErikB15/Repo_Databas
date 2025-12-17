@@ -12,68 +12,46 @@ public class OrderDAO {
     }
 
     public void showAllOrders() throws SQLException {
-        String sql = "SELECT * FROM v_all_orders";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            System.out.println(
-                    "OrderID: " + rs.getInt("OrderID") +
-                            ", CustomerID: " + rs.getInt("customerID") +
-                            ", Status: " + rs.getString("order_Status")
-            );
+        String sql = "SELECT * FROM get_all_orders()";
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                System.out.println("OrderID: " + rs.getInt("out_orderID") + ", CustomerID: " + rs.getInt("out_customerID") + ", Status: " + rs.getString("out_order_status") + ", ProductBySupplierID: " + rs.getInt("out_pro_sup_ID") + ", OrderDate: " + rs.getTimestamp("out_order_date"));
+            }
         }
-        rs.close();
-        ps.close();
     }
 
+
     public void showUserOrders(int customerID) throws SQLException {
-        String sql = "SELECT * FROM CustomerOrder WHERE customerID = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, customerID);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            System.out.println(
-                    "OrderID: " + rs.getInt("OrderID") +
-                            ", Status: " + rs.getString("order_Status")
-            );
+        String sql = "SELECT * FROM get_user_orders(?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    System.out.println("OrderID: " + rs.getInt("out_orderID") + ", Status: " + rs.getString("out_order_status") + ", ProductBySupplierID: " + rs.getInt("out_pro_sup_ID") + ", OrderDate: " + rs.getTimestamp("out_order_date"));
+                }
+            }
         }
-        rs.close();
-        ps.close();
     }
+
 
     public void placeOrder(int customerID, Menu menu) throws SQLException {
         int productID = menu.readInt("Enter product ID to order: ");
         int amount = menu.readInt("Enter amount: ");
+        String sql = "SELECT place_order(?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            ps.setInt(2, productID);
+            ps.setInt(3, amount);
 
-        String checkSql = "SELECT stock FROM productBySupplier WHERE article_number = ?";
-        PreparedStatement psCheck = conn.prepareStatement(checkSql);
-        psCheck.setInt(1, productID);
-        ResultSet rs = psCheck.executeQuery();
-        if (rs.next()) {
-            int stock = rs.getInt("stock");
-            if (amount > stock) {
-                System.out.println("Not enough stock available.");
-            } else {
-                String insertOrder = "INSERT INTO CustomerOrder(customerID, order_Status, Pro_Sup_ID) VALUES(?, 'New', ?)";
-                PreparedStatement psOrder = conn.prepareStatement(insertOrder);
-                psOrder.setInt(1, customerID);
-                psOrder.setInt(2, productID);
-                psOrder.executeUpdate();
-                psOrder.close();
-
-                String updateStock = "UPDATE productBySupplier SET stock = stock - ? WHERE article_number = ?";
-                PreparedStatement psStock = conn.prepareStatement(updateStock);
-                psStock.setInt(1, amount);
-                psStock.setInt(2, productID);
-                psStock.executeUpdate();
-                psStock.close();
-
-                System.out.println("Order placed successfully!");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String message = rs.getString(1);
+                    System.out.println(message);
+                }
             }
-        } else {
-            System.out.println("Product not found.");
         }
-        rs.close();
-        psCheck.close();
     }
+
 }

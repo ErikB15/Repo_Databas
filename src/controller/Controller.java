@@ -5,6 +5,7 @@ import entity.UserDAO;
 import entity.ProductDAO;
 import entity.OrderDAO;
 import entity.CustomerDAO;
+import java.util.Scanner;
 
 public class Controller {
 
@@ -17,6 +18,8 @@ public class Controller {
     private int loggedUserID;
     private int loggedAdminID;
     private boolean isAdmin;
+
+    Scanner scanner = new Scanner(System.in);
 
     public Controller() throws Exception {
         userDAO = new UserDAO();
@@ -34,6 +37,12 @@ public class Controller {
             switch (choice) {
                 case 1:
                     productDAO.showAllProducts();
+                    break;
+                case 2:
+                    System.out.println("Search for products: ");
+                    String searchterm = scanner.nextLine();
+                    productDAO.searchProducts(searchterm);
+                    break;
                 case 3:
                     if (userDAO.loginUser(menu)) {
                         loggedUserID = userDAO.getLoggedUserID();
@@ -96,7 +105,12 @@ public class Controller {
                 case 1: productDAO.showAllProducts();{
                     break;
                 }
-                case 2: productDAO.addProduct(menu.readString("Product name: "), menu.readString("Article Number: "), menu.readInt("Stock: "), menu.readInt("Price: "), menu.readString("Supplier ID: "));{
+                case 2: {
+                    String productName = menu.readString("Product name: ");
+                    int stock = menu.readInt("Stock: ");
+                    int price = menu.readInt("Price: ");
+                    int supplierID = menu.readInt("Supplier id: ");
+                    productDAO.addProduct(productName, stock, price, supplierID);
                     break;
                 }
                 case 3: productDAO.deleteProduct(menu.readInt("Product ID to delete: "));{

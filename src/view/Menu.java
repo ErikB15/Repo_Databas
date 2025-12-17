@@ -19,7 +19,8 @@ public class Menu {
         System.out.println("--- REGISTER ---");
         System.out.println("5. Register user");
         System.out.println("6. Register admin");
-        System.out.print("Choice: ");
+        System.out.println();
+        System.out.print("What would you like to do?: ");
         return scanner.nextInt();
     }
 
@@ -53,6 +54,7 @@ public class Menu {
             scanner.next();
             System.out.print(prompt);
         }
+        scanner.nextLine();
         return scanner.nextInt();
     }
 
