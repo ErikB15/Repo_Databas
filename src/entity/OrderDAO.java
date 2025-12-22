@@ -41,7 +41,7 @@ public class OrderDAO {
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, customerID);
-            try (ResultSet rs = ps.executeQuery()) {
+ try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     System.out.println("OrderID: " + rs.getInt("OrderID")
                             + ", Status: " + rs.getString("order_status")
@@ -53,9 +53,6 @@ public class OrderDAO {
             }
         }
     }
-
-
-
     public String addToCart(int customerID, int productID, int amount) {
         String sql = "SELECT add_to_cart(?, ?, ?)";
 

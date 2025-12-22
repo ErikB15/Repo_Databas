@@ -4,18 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ecf593f1-482d-43f3-8dd5-22c643449705" name="Changes" comment="tog bort tesdt i main">
+    <list default="true" id="ecf593f1-482d-43f3-8dd5-22c643449705" name="Changes" comment="databs project fortsättning">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Repo_Databas/controller/Controller.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Repo_Databas/controller/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Repo_Databas/controller/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Repo_Databas/entity/OrderDAO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Repo_Databas/view/Menu.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Repo_Databas/view/Menu.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/entity/OrderDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/OrderDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entity/ProductDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/ProductDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/Menu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -87,7 +95,8 @@
       <updated>1765979868633</updated>
       <workItem from="1765979869656" duration="13273000" />
       <workItem from="1765996292793" duration="19000" />
-      <workItem from="1766316496817" duration="22580000" />
+      <workItem from="1766316496817" duration="22901000" />
+      <workItem from="1766399255358" duration="3016000" />
     </task>
     <task id="LOCAL−00001" summary="utvecklat databas projektet mer med funktioner och liknannde">
       <option name="closed" value="true" />
@@ -103,7 +112,14 @@
       <option name="presentableId" value="LOCAL−00002" />
       <updated>1765996177304</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL−00003" summary="databs project fortsättning">
+      <option name="closed" value="true" />
+      <created>1766358180707</created>
+      <option name="number" value="LOCAL−00003" />
+      <option name="presentableId" value="LOCAL−00003" />
+      <updated>1766358180707</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -112,6 +128,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="utvecklat databas projektet mer med funktioner och liknannde" />
     <MESSAGE value="tog bort tesdt i main" />
-    <option name="LAST_COMMIT_MESSAGE" value="tog bort tesdt i main" />
+    <MESSAGE value="databs project fortsättning" />
+    <option name="LAST_COMMIT_MESSAGE" value="databs project fortsättning" />
   </component>
 </project>
