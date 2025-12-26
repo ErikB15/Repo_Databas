@@ -3,7 +3,7 @@ package controller;
 /**
  * ALLA KRAV SOM ÄR KVAR:
  * admin:
- * r-8-11, r14
+ * r-8-11
  * User:
  * r5, r10, ,r11(discount part), r13.
  */

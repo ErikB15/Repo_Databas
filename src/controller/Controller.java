@@ -178,12 +178,17 @@ public class Controller {
                     System.out.println(result);
                     break;
 
-                case 0:
-                    running = false;
-                    break;
                 case 9:
                     String searchWord = menu.readString("Enter product name, article number or supplier: ");
                     productDAO.searchProductsAdvanced(searchWord);
+                    break;
+
+                case 0:
+                    running = false;
+                    break;
+
+                case 10:
+                    orderDAO.maxOrders();
                     break;
 
                 default:

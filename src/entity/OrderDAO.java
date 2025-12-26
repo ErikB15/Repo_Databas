@@ -1,7 +1,6 @@
 package entity;
 
 import java.sql.*;
-import view.Menu;
 
 public class OrderDAO {
 
@@ -98,6 +97,24 @@ public class OrderDAO {
             }
         } catch (SQLException e) {
             return "Error handling order: " + e.getMessage();
+        }
+    }
+    public void maxOrders() {
+        String sql = "SELECT * FROM get_top_products_per_month()";
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                int year = rs.getInt("out_year");
+                int month = rs.getInt("out_month");
+                int articleNumber = rs.getInt("out_articleNumber");
+                String product = rs.getString("out_product_name");
+                int orders = rs.getInt("out_order_count");
+                System.out.printf("%d-%d (Article Number: %d): %s → %d orders%n", year, month, articleNumber, product, orders);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error, try again: " + e.getMessage());
         }
     }
 }

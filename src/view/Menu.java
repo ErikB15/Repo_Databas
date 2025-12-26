@@ -65,6 +65,7 @@ public class Menu {
             System.out.println("7. Show all suppliers");
             System.out.println("8. Approve/Reject orders");
             System.out.println("9. Search for products: ");
+            System.out.println("10. list of product most orderd in each month");
             System.out.println("0. Logout");
             System.out.print("Choice: ");
             try {
