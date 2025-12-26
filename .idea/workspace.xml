@@ -92,7 +92,8 @@
       <workItem from="1765996292793" duration="19000" />
       <workItem from="1766316496817" duration="22901000" />
       <workItem from="1766399255358" duration="3056000" />
-      <workItem from="1766405160203" duration="15000" />
+      <workItem from="1766405160203" duration="69000" />
+      <workItem from="1766775061256" duration="1830000" />
     </task>
     <task id="LOCAL−00001" summary="utvecklat databas projektet mer med funktioner och liknannde">
       <option name="closed" value="true" />
@@ -122,7 +123,14 @@
       <option name="presentableId" value="LOCAL−00004" />
       <updated>1766403051930</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL−00005" summary="databs project fortsättning">
+      <option name="closed" value="true" />
+      <created>1766405179565</created>
+      <option name="number" value="LOCAL−00005" />
+      <option name="presentableId" value="LOCAL−00005" />
+      <updated>1766405179565</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
