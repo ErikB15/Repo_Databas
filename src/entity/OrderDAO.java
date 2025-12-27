@@ -66,19 +66,45 @@ public class OrderDAO {
             return "Error: " + e.getMessage();
         }
     }
-    public String checkout(int customerID) {
-        String sql = "SELECT checkout_cart(?)";
+    public void showCart(int customerID) {
+        String sql = "SELECT * FROM get_cart_details(?)";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, customerID);
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-            return rs.getString(1);
+            try (ResultSet rs = ps.executeQuery()) {
+                boolean empty = true;
+                int cartTotal = 0;
+
+                System.out.println("\n---- Your Cart ----");
+                System.out.printf("%-25s %-20s %-15s %-7s %-9s %-15s%n",
+                        "Product", "Supplier", "Original Price", "Amount", "Discount", "Discounted price");
+
+                while (rs.next()) {
+                    empty = false;
+
+                    String product = rs.getString("product_name");
+                    String supplier = rs.getString("supplier_name");
+                    int price = rs.getInt("price");
+                    int amount = rs.getInt("amount");
+                    int discount = rs.getInt("discount_percentage");
+                    int rowTotal = rs.getInt("row_total");
+                    cartTotal = rs.getInt("cart_total");
+
+                    System.out.printf("%-25s %-20s %-15d %-7d %-9d %-15d%n",
+                            product, supplier, price, amount, discount, rowTotal);
+                }
+
+                if (empty) {
+                    System.out.println("Cart is empty.");
+                } else {
+                    System.out.println("------------------------------------");
+                    System.out.println("Total: " + cartTotal + " SEK\n");
+                }
+            }
         } catch (SQLException e) {
-            return "Error: " + e.getMessage();
+            System.out.println("Error loading cart: " + e.getMessage());
         }
     }
-
 
     public String handleOrder(int orderID, boolean approve) {
         String sql = approve ? "SELECT approve_order(?)" : "SELECT reject_order(?)";
@@ -115,6 +141,45 @@ public class OrderDAO {
 
         } catch (SQLException e) {
             System.out.println("Error, try again: " + e.getMessage());
+        }
+    }
+    public String confirmCheckout(int customerID) {
+        String sql = "UPDATE CustomerOrder " +
+                "SET order_status = 'Pending' " +
+                "WHERE customerID = ? AND order_status = 'Cart' " +
+                "RETURNING orderID";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int orderID = rs.getInt("orderID");
+                return "Order placed! OrderID: " + orderID + ". Waiting for admin approval.";
+            } else {
+                return "No active cart found.";
+            }
+        } catch (SQLException e) {
+            return "Error confirming order: " + e.getMessage();
+        }
+    }
+
+
+    public String cancelCart(int customerID) {
+        String sql1 = "DELETE FROM order_item WHERE orderID IN " +
+                "(SELECT orderID FROM CustomerOrder WHERE customerID = ? AND order_status = 'Cart')";
+        String sql2 = "DELETE FROM CustomerOrder WHERE customerID = ? AND order_status = 'Cart'";
+
+        try (PreparedStatement ps1 = conn.prepareStatement(sql1);
+             PreparedStatement ps2 = conn.prepareStatement(sql2)) {
+
+            ps1.setInt(1, customerID);
+            ps1.executeUpdate();
+
+            ps2.setInt(1, customerID);
+            ps2.executeUpdate();
+
+            return "Cart cancelled.";
+        } catch (SQLException e) {
+            return "Error cancelling cart: " + e.getMessage();
         }
     }
 }

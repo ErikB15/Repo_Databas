@@ -1,11 +1,7 @@
 package controller;
 
 /**
- * ALLA KRAV SOM ÄR KVAR:
- * admin:
- * r-8-11
- * User:
- * r5, r10, ,r11(discount part), r13.
+ * Tror faktiskt alla krav är uppfyllda, läs igenom allt, suuuper noga. sen läs igenom krav igen, döreftfer se om du kan snygga till outprints och felsök en massa.
  */
 
 public class Main {

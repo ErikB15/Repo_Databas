@@ -38,10 +38,11 @@ public class Menu {
             System.out.println("\n--- USER MENU ---");
             System.out.println("1. Show all products");
             System.out.println("2. Add products to cart");
-            System.out.println("3. Checkout");
+            System.out.println("3. Checkout shopping cart");
             System.out.println("4. Show my orders");
             System.out.println("5. Show my account info");
             System.out.println("6. Search for products");
+            System.out.println("7. Show all current discounted products");
             System.out.println("0. Logout");
             System.out.print("Choice: ");
             try {
@@ -64,8 +65,12 @@ public class Menu {
             System.out.println("6. Add supplier");
             System.out.println("7. Show all suppliers");
             System.out.println("8. Approve/Reject orders");
-            System.out.println("9. Search for products: ");
-            System.out.println("10. list of product most orderd in each month");
+            System.out.println("9. Search for products");
+            System.out.println("10. List of most ordered products per month");
+            System.out.println("11. Add discount");
+            System.out.println("12. Assign discount to product with date");
+            System.out.println("13. Show discount history");
+            System.out.println("14. Update discount for product (R9)");
             System.out.println("0. Logout");
             System.out.print("Choice: ");
             try {
@@ -73,9 +78,10 @@ public class Menu {
             } catch (Exception e) {
                 System.out.println("Wrong input, please enter a number shown in menu");
                 scanner.nextLine();
-                }
             }
         }
+    }
+
     public int readInt(String prompt) {
         System.out.print(prompt);
         while (!scanner.hasNextInt()) {
@@ -91,5 +97,11 @@ public class Menu {
     public String readString(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();
+    }
+
+    public void clearBuffer() {
+        if (scanner.hasNextLine()) {
+            scanner.nextLine();
+        }
     }
 }

@@ -98,8 +98,7 @@ public class Controller {
                     break;
 
                 case 3:
-                    String checkoutResult = orderDAO.checkout(loggedUserID);
-                    System.out.println(checkoutResult);
+                    checkoutMenu(loggedUserID, menu);
                     break;
 
                 case 4:
@@ -110,8 +109,13 @@ public class Controller {
                     customerDAO.showCustomerInfo(loggedUserID);
                     break;
                 case 6:
+                    menu.clearBuffer();
                     String searchterm = menu.readString("Search for products: ");
                     productDAO.searchProducts(searchterm);
+                    break;
+
+                case 7:
+                    productDAO.showCurrentDiscounts();
                     break;
 
                 case 0:
@@ -183,17 +187,75 @@ public class Controller {
                     productDAO.searchProductsAdvanced(searchWord);
                     break;
 
-                case 0:
-                    running = false;
-                    break;
-
                 case 10:
                     orderDAO.maxOrders();
+                    break;
+
+                case 11:
+                    menu.clearBuffer();
+                    // Lägga till rabattkod (R8)
+                    String code = menu.readString("Discount code: ");
+                    String codeName = menu.readString("Discount name: ");
+                    int percentage = menu.readInt("Discount percentage (0-100): ");
+                    String reason = menu.readString("Reason for discount: ");
+                    String addDiscountResult = productDAO.addDiscount(code, codeName, percentage, reason);
+                    System.out.println(addDiscountResult);
+                    break;
+
+                case 12:
+                    menu.clearBuffer();
+                    productDAO.showAllProductsBySupplier();
+                    int prSuID = menu.readInt("Enter Pr_Su_ID of product to apply discount: ");
+                    String assignCode = menu.readString("Discount code to assign: ");
+                    String fromDate = menu.readString("Start date (YYYY-MM-DD): ");
+                    String toDate = menu.readString("End date (YYYY-MM-DD): ");
+                    String assignResult = productDAO.assignDiscount(assignCode, prSuID, fromDate, toDate);
+                    System.out.println(assignResult);
+                    break;
+
+                case 13:
+                    menu.clearBuffer();
+                    productDAO.showDiscountHistory();
+                    break;
+
+                case 14:
+                    menu.clearBuffer();
+
+                    // Uppdatera rabatt för produkt (R9)
+                    String updCode = menu.readString("Discount code to update: ");
+                    int updProductID = menu.readInt("Product ID: ");
+                    int newPercentage = menu.readInt("New discount percentage (0-100): ");
+                    String newFromDate = menu.readString("New start date (YYYY-MM-DD): ");
+                    String newToDate = menu.readString("New end date (YYYY-MM-DD): ");
+                    String updateResult = productDAO.updateDiscount(updCode, updProductID, newPercentage, newFromDate, newToDate);
+                    System.out.println(updateResult);
+                    break;
+
+                case 0:
+                    running = false;
                     break;
 
                 default:
                     System.out.println("Invalid input. Try again.");
             }
+        }
+    }
+
+
+    public void checkoutMenu(int customerID, Menu menu) {
+        orderDAO.showCart(customerID);
+
+        System.out.println("1. Confirm order");
+        System.out.println("2. Cancel order");
+        System.out.println("3. Continue shopping");
+
+        int choice = menu.readInt("Choose option: ");
+
+        switch (choice) {
+            case 1 -> System.out.println(orderDAO.confirmCheckout(customerID));
+            case 2 -> System.out.println(orderDAO.cancelCart(customerID));
+            case 3 -> System.out.println("Continuing shopping...");
+            default -> System.out.println("Invalid choice");
         }
     }
 }
