@@ -70,7 +70,7 @@ public class Menu {
             System.out.println("11. Add discount");
             System.out.println("12. Assign discount to product with date");
             System.out.println("13. Show discount history");
-            System.out.println("14. Update discount for product (R9)");
+            System.out.println("14. Update discount for product");
             System.out.println("0. Logout");
             System.out.print("Choice: ");
             try {
@@ -97,11 +97,5 @@ public class Menu {
     public String readString(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();
-    }
-
-    public void clearBuffer() {
-        if (scanner.hasNextLine()) {
-            scanner.nextLine();
-        }
     }
 }

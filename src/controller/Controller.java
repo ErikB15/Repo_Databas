@@ -109,7 +109,6 @@ public class Controller {
                     customerDAO.showCustomerInfo(loggedUserID);
                     break;
                 case 6:
-                    menu.clearBuffer();
                     String searchterm = menu.readString("Search for products: ");
                     productDAO.searchProducts(searchterm);
                     break;
@@ -149,8 +148,7 @@ public class Controller {
                     break;
 
                 case 3:
-                    int deleteID = menu.readInt("Product ID to delete: ");
-                    productDAO.deleteProduct(deleteID);
+                    productDAO.deleteProduct(menu);
                     break;
 
                 case 4:
@@ -167,7 +165,8 @@ public class Controller {
                     String supplierName = menu.readString("Supplier's name: ");
                     String phoneNumber = menu.readString("Phone number (07...): ");
                     int supplierId = menu.readInt("Supplier id (ex. 123...): ");
-                    productDAO.addSupplier(supplierName, phoneNumber, supplierId);
+                    String address = menu.readString("Address: ");
+                    productDAO.addSupplier(supplierName, phoneNumber, supplierId, address);
                     break;
 
                 case 7:
@@ -192,8 +191,6 @@ public class Controller {
                     break;
 
                 case 11:
-                    menu.clearBuffer();
-                    // Lägga till rabattkod (R8)
                     String code = menu.readString("Discount code: ");
                     String codeName = menu.readString("Discount name: ");
                     int percentage = menu.readInt("Discount percentage (0-100): ");
@@ -203,7 +200,6 @@ public class Controller {
                     break;
 
                 case 12:
-                    menu.clearBuffer();
                     productDAO.showAllProductsBySupplier();
                     int prSuID = menu.readInt("Enter Pr_Su_ID of product to apply discount: ");
                     String assignCode = menu.readString("Discount code to assign: ");
@@ -214,14 +210,10 @@ public class Controller {
                     break;
 
                 case 13:
-                    menu.clearBuffer();
                     productDAO.showDiscountHistory();
                     break;
 
                 case 14:
-                    menu.clearBuffer();
-
-                    // Uppdatera rabatt för produkt (R9)
                     String updCode = menu.readString("Discount code to update: ");
                     int updProductID = menu.readInt("Product ID: ");
                     int newPercentage = menu.readInt("New discount percentage (0-100): ");

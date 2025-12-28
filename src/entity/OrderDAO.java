@@ -11,6 +11,7 @@ public class OrderDAO {
     }
 
     public void showAllOrders() throws SQLException {
+        System.out.println("------ ALL ORDERS ------");
         String sql = "SELECT * FROM get_all_orders()";
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -60,12 +61,16 @@ public class OrderDAO {
             ps.setInt(2, productID);
             ps.setInt(3, amount);
             ResultSet rs = ps.executeQuery();
-            rs.next();
-            return rs.getString(1);
+            if (rs.next()) {
+                return rs.getString(1);
+            } else {
+                return "Error: Could not add product to cart.";
+            }
         } catch (SQLException e) {
             return "Error: " + e.getMessage();
         }
     }
+
     public void showCart(int customerID) {
         String sql = "SELECT * FROM get_cart_details(?)";
 

@@ -30,7 +30,7 @@ public class UserDAO {
             ps.setString(2, password);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+                if (rs.next() && !rs.wasNull()) {
                     Integer id = rs.getInt(1);
                     if (rs.wasNull()) {
                         System.out.println("Login failed.");
@@ -46,18 +46,22 @@ public class UserDAO {
         return false;
     }
 
-
     public boolean loginAdmin(Menu menu) throws SQLException {
         String username = menu.readString("Enter admin first name: ");
-        String password = menu.readString("Enter admin ID as password: "); // simple example
+        String password = menu.readString("Enter admin ID as password: ");
 
         String sql = "SELECT login_admin(?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
-            ps.setInt(2, Integer.parseInt(password));
+            try {
+                ps.setInt(2, Integer.parseInt(password));
+            } catch (NumberFormatException e) {
+                System.out.println("Admin ID must be a number.");
+                return false;
+            }
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+                if (rs.next() && !rs.wasNull()) {
                     Integer id = rs.getInt(1);
                     if (rs.wasNull()) {
                         System.out.println("Login failed.");
@@ -72,7 +76,6 @@ public class UserDAO {
         }
         return false;
     }
-
 
     public void registerUser(Menu menu) throws SQLException {
         String firstName = menu.readString("First Name: ");

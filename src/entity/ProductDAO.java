@@ -1,6 +1,10 @@
 package entity;
 
+import view.Menu;
+
 import java.sql.*;
+
+import static java.awt.SystemColor.menu;
 
 public class ProductDAO {
 
@@ -11,6 +15,7 @@ public class ProductDAO {
     }
 
     public void showAllProducts() throws SQLException {
+        System.out.println("------ ALL PRODUCTS ------");
         String sql = "SELECT * FROM get_all_products()";
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -33,7 +38,7 @@ public class ProductDAO {
             ps.execute();
             System.out.println("Product added successfully!");
         } catch (SQLException e) {
-            if (e.getSQLState().equals("23505")) {
+            if ("23505".equals(e.getSQLState())) {
                 System.out.println("Cannot add product: Article number " + articleNumber + " already exists.");
             } else {
                 System.out.println("An error occurred: " + e.getMessage());
@@ -41,28 +46,38 @@ public class ProductDAO {
         }
     }
 
+    public boolean deleteProduct(Menu menu) throws SQLException {
+        int articleNumber = menu.readInt("Enter article number to delete: ");
 
-
-
-    public void deleteProduct(int productID) throws SQLException {
-        String sql = "SELECT delete_product_safe(?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, productID);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                boolean deleted = rs.getBoolean(1);
-                if (deleted) {
-                    System.out.println("Product deleted successfully!");
+        Integer prSuID = null;
+        String sql1 = "SELECT Pr_Su_ID FROM productBySupplier WHERE article_number = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql1)) {
+            ps.setInt(1, articleNumber);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    prSuID = rs.getInt("Pr_Su_ID");
                 } else {
-                    System.out.println("Cannot delete product, it has already been sold.");
+                    System.out.println("Product with article number " + articleNumber + " not found.");
+                    return false;
                 }
             }
-            rs.close();
         }
+
+        String sql2 = "SELECT delete_product_safe(?)";
+        try (PreparedStatement ps2 = conn.prepareStatement(sql2)) {
+            ps2.setInt(1, prSuID);
+            try (ResultSet rs2 = ps2.executeQuery()) {
+                if (rs2.next()) {
+                    boolean success = rs2.getBoolean(1);
+                    if (success) System.out.println("Product deleted successfully!");
+                    else System.out.println("Cannot delete product (it may have existing orders).");
+                    return success;
+                }
+            }
+        }
+
+        return false;
     }
-
-
 
     public void editQuantity(int productID, int newQuantity) throws SQLException {
         String sql = "SELECT update_product_quantity(?, ?)";
@@ -92,16 +107,18 @@ public class ProductDAO {
             e.printStackTrace();
         }
     }
-    public void addSupplier(String supplierName,  String phoneNumber, int supplierID) throws SQLException{
-        String sql = "SELECT add_supplier(?, ?, ?)";
+    public void addSupplier(String supplierName, String phoneNumber, int supplierID, String address) throws SQLException {
+        String sql = "SELECT add_supplier(?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, supplierName);
-            ps.setInt(2, Integer.parseInt(phoneNumber));
-            ps.setInt(3, supplierID);
+            ps.setString(2, phoneNumber);
+            ps.setString(3, address);
+            ps.setInt(4, supplierID);
             ps.execute();
         }
         System.out.println("Supplier added successfully!");
     }
+
     public void showAllSuppliers() throws SQLException {
         String sql = "SELECT * FROM get_all_suppliers()";
         PreparedStatement ps = conn.prepareStatement(sql);
