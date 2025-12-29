@@ -100,7 +100,7 @@ public class OrderDAO {
                 }
 
                 if (empty) {
-                    System.out.println("Cart is empty.");
+                    System.out.println("Cart is empty.\n");
                 } else {
                     System.out.println("------------------------------------");
                     System.out.println("Total: " + cartTotal + " SEK\n");

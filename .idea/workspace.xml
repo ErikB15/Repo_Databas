@@ -4,17 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ecf593f1-482d-43f3-8dd5-22c643449705" name="Changes" comment="dom sista kraven uppfyllda tror jag">
+    <list default="true" id="ecf593f1-482d-43f3-8dd5-22c643449705" name="Changes" comment="lite felkhanterring i diverse metodfer">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Repo_Databas/controller/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Repo_Databas/controller/Controller.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Repo_Databas/controller/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Repo_Databas/controller/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Repo_Databas/entity/OrderDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Repo_Databas/entity/OrderDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Repo_Databas/entity/ProductDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Repo_Databas/entity/ProductDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Repo_Databas/entity/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Repo_Databas/entity/UserDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Repo_Databas/view/Menu.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Repo_Databas/view/Menu.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/entity/OrderDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/OrderDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/entity/ProductDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/ProductDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entity/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/UserDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/Menu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -104,7 +103,7 @@
       <workItem from="1766405160203" duration="69000" />
       <workItem from="1766775061256" duration="5264000" />
       <workItem from="1766838876406" duration="15087000" />
-      <workItem from="1766930428851" duration="6999000" />
+      <workItem from="1766930428851" duration="16468000" />
     </task>
     <task id="LOCAL−00001" summary="utvecklat databas projektet mer med funktioner och liknannde">
       <option name="closed" value="true" />
@@ -169,7 +168,14 @@
       <option name="presentableId" value="LOCAL−00009" />
       <updated>1766878892301</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL−00010" summary="lite felkhanterring i diverse metodfer">
+      <option name="closed" value="true" />
+      <created>1766938067196</created>
+      <option name="number" value="LOCAL−00010" />
+      <option name="presentableId" value="LOCAL−00010" />
+      <updated>1766938067196</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -182,6 +188,7 @@
     <MESSAGE value="lista alla mest spålda producter per mpnad funktion för admin" />
     <MESSAGE value="småfix" />
     <MESSAGE value="dom sista kraven uppfyllda tror jag" />
-    <option name="LAST_COMMIT_MESSAGE" value="dom sista kraven uppfyllda tror jag" />
+    <MESSAGE value="lite felkhanterring i diverse metodfer" />
+    <option name="LAST_COMMIT_MESSAGE" value="lite felkhanterring i diverse metodfer" />
   </component>
 </project>

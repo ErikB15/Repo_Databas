@@ -46,7 +46,9 @@ public class Menu {
             System.out.println("0. Logout");
             System.out.print("Choice: ");
             try {
-                return scanner.nextInt();
+                int choice = scanner.nextInt();
+                scanner.nextLine();
+                return choice;
             } catch (Exception e) {
                 System.out.println("Wrong input, please enter a number shown in menu");
                 scanner.nextLine();
@@ -74,7 +76,9 @@ public class Menu {
             System.out.println("0. Logout");
             System.out.print("Choice: ");
             try {
-                return scanner.nextInt();
+                int choice = scanner.nextInt();
+                scanner.nextLine();
+                return choice;
             } catch (Exception e) {
                 System.out.println("Wrong input, please enter a number shown in menu");
                 scanner.nextLine();
@@ -83,16 +87,15 @@ public class Menu {
     }
 
     public int readInt(String prompt) {
-        System.out.print(prompt);
-        while (!scanner.hasNextInt()) {
-            System.out.println("Invalid input, enter a number.");
-            scanner.next();
-            System.out.print(prompt);
+        while (true) {
+            try {
+                return Integer.parseInt(readString(prompt));
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input, enter a number.");
+            }
         }
-        int value = scanner.nextInt();
-        scanner.nextLine();
-        return value;
     }
+
 
     public String readString(String prompt) {
         System.out.print(prompt);

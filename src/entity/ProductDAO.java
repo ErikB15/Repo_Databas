@@ -4,8 +4,6 @@ import view.Menu;
 
 import java.sql.*;
 
-import static java.awt.SystemColor.menu;
-
 public class ProductDAO {
 
     private Connection conn;
@@ -15,16 +13,30 @@ public class ProductDAO {
     }
 
     public void showAllProducts() throws SQLException {
-        System.out.println("------ ALL PRODUCTS ------");
-        String sql = "SELECT * FROM get_all_products()";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
+        System.out.println("\n------ ALL PRODUCTS ------\n");
 
-        while (rs.next()) {
-            System.out.println(rs.getString("name") + ", " + "Price: " + rs.getInt("price") + ", " + "Available in stock: " + rs.getInt("stock") + ", " + "Supplier: " + rs.getString("supplier") + ", " + "Article number: " + rs.getInt("article_number"));
+        String sql = "SELECT * FROM get_all_products()";
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            System.out.printf(
+                    "%-35s %-15s %-15s %-8s %-15s %-10s%n",
+                    "Product", "Original Price", "Discounted", "Stock", "Supplier", "Article#"
+            );
+            System.out.println("------------------------------------------------------------------------------------------------");
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+                int price = rs.getInt("price");
+                int discountedPrice = rs.getInt("discounted_price");
+                int stock = rs.getInt("stock");
+                String supplier = rs.getString("supplier");
+                int articleNumber = rs.getInt("article_number");
+
+                System.out.printf("%-35s %-15d %-15d %-8d %-15s %-10d%n",
+                        name, price, discountedPrice, stock, supplier, articleNumber);
+            }
         }
-        rs.close();
-        ps.close();
     }
 
     public void addProduct(String productName, int articleNumber, int stock, int price, int supplierID) {
@@ -93,20 +105,6 @@ public class ProductDAO {
         }
     }
 
-
-    public void searchProducts(String searchTerm) {
-        String sql = "SELECT * FROM search_products(?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, searchTerm);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                System.out.println("Name: " + rs.getString("name") + ", Price: " + rs.getInt("price") + ", Stock: " + rs.getInt("stock") + ", Supplier: " + rs.getString("supplier") + ", " + "Article number: " + rs.getInt("article_number"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     public void addSupplier(String supplierName, String phoneNumber, int supplierID, String address) throws SQLException {
         String sql = "SELECT add_supplier(?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -121,31 +119,70 @@ public class ProductDAO {
 
     public void showAllSuppliers() throws SQLException {
         String sql = "SELECT * FROM get_all_suppliers()";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-        System.out.println("\n--- All suppliers ---");
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-        while (rs.next()) {
-            String nameOfSupplier = rs.getString("out_nameOfSupplier");
-            int supplier_id = rs.getInt("out_supplier_id");
-            System.out.println("Name: " + nameOfSupplier + ", Supplier ID: " + supplier_id);
+            System.out.printf("\n%-25s %-10s%n", "Supplier Name", "ID");
+            System.out.println("--------------------------------------");
+
+            while (rs.next()) {
+                String name = rs.getString("out_nameOfSupplier");
+                int id = rs.getInt("out_supplier_id");
+                System.out.printf("%-25s %-10d%n", name, id);
+            }
         }
-        rs.close();
-        ps.close();
     }
-    public void searchProductsAdvanced(String searchTerm) throws SQLException {
-        String sql = "SELECT * FROM search_products_advanced(?)";
+
+    public void searchProducts(String searchTerm) throws SQLException {
+        System.out.println("\n------ SEARCH RESULTS ------\n");
+
+        // Försök tolka sökterm som ett pris (ta bort "kr" om användaren skrev det)
+        Integer priceLimit = null;
+        try {
+            String numericTerm = searchTerm.replaceAll("[^0-9]", ""); // ta bort allt som inte är siffror
+            if (!numericTerm.isEmpty()) {
+                priceLimit = Integer.parseInt(numericTerm);
+            }
+        } catch (NumberFormatException ignored) {}
+
+        String sql = "SELECT * FROM get_all_products() " +
+                "WHERE name ILIKE ? OR " +
+                "CAST(article_number AS TEXT) ILIKE ? OR " +
+                "supplier ILIKE ? " +
+                (priceLimit != null ? "OR discounted_price <= ?" : ""); // ändrat till discounted_price
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, searchTerm);
+            String queryTerm = "%" + searchTerm + "%";
+            ps.setString(1, queryTerm);
+            ps.setString(2, queryTerm);
+            ps.setString(3, queryTerm);
+
+            if (priceLimit != null) {
+                ps.setInt(4, priceLimit);
+            }
+
             try (ResultSet rs = ps.executeQuery()) {
+                System.out.printf(
+                        "%-35s %-15s %-15s %-8s %-15s %-10s%n",
+                        "Product", "Original Price", "Discounted", "Stock", "Supplier", "Article#"
+                );
+                System.out.println("------------------------------------------------------------------------------------------------");
+
                 while (rs.next()) {
-                    System.out.println(rs.getString("name") + ", Price: " + rs.getInt("price") +
-                            ", Stock: " + rs.getInt("stock") + ", Supplier: " + rs.getString("supplier") +
-                            ", Article number: " + rs.getInt("article_number"));
+                    String name = rs.getString("name");
+                    int price = rs.getInt("price");
+                    int discountedPrice = rs.getInt("discounted_price");
+                    int stock = rs.getInt("stock");
+                    String supplier = rs.getString("supplier");
+                    int articleNumber = rs.getInt("article_number");
+
+                    System.out.printf("%-35s %-15d %-15d %-8d %-15s %-10d%n",
+                            name, price, discountedPrice, stock, supplier, articleNumber);
                 }
             }
         }
     }
+
     public String addDiscount(String code, String codeName, int percentage, String reason) {
         String sql = "SELECT add_discount(?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -162,13 +199,14 @@ public class ProductDAO {
     }
 
 
-    public String assignDiscount(String code, int productID, String from, String to) {
+    public String assignDiscount(int articleNumber, String code, String from, String to) {
         String sql = "SELECT assign_discount_to_product(?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, code);
-            ps.setInt(2, productID);
+            ps.setInt(2, articleNumber);
             ps.setDate(3, Date.valueOf(from));
             ps.setDate(4, Date.valueOf(to));
+
             ResultSet rs = ps.executeQuery();
             rs.next();
             return rs.getString(1);
@@ -176,37 +214,43 @@ public class ProductDAO {
             return "Error assigning discount: " + e.getMessage();
         }
     }
+
     public void showDiscountHistory() {
         String sql = "SELECT * FROM get_discount_history()";
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
-            System.out.printf("%-20s %-15s %-10s %-10s %-12s %-12s %-10s%n",
-                    "Product", "Supplier", "Code", "Discount", "From", "To", "Final Price");
+            System.out.printf(
+                    "%-35s %-18s %-10s %-10s %-12s %-12s %-15s%n",
+                    "Product", "Supplier", "Code", "Discount", "From", "To", "Final Price"
+            );
+            System.out.println("------------------------------------------------------------------------------------------------");
 
             while (rs.next()) {
-                System.out.printf("%-20s %-15s %-10s %-10d %-12s %-12s %-10d%n",
-                        rs.getString("product_name"),
-                        rs.getString("supplier_name"),
-                        rs.getString("discount_code"),
-                        rs.getInt("discount_percentage"),
-                        rs.getDate("date_from"),
-                        rs.getDate("date_to"),
-                        rs.getInt("final_price")
-                );
+                String name = rs.getString("product_name");
+                String supplier = rs.getString("supplier_name");
+                String code = rs.getString("discount_code");
+                int discount = rs.getInt("discount_percentage");
+                Date from = rs.getDate("date_from");
+                Date to = rs.getDate("date_to");
+                int finalPrice = rs.getInt("final_price");
+
+                System.out.printf("%-35s %-18s %-10s %-10d %-12s %-12s %-15d%n",
+                        name, supplier, code, discount, from, to, finalPrice);
             }
         } catch (SQLException e) {
             System.out.println("Error showing discount history: " + e.getMessage());
         }
     }
-    public String updateDiscount(String code, int productID, int newPercentage, String fromDate, String toDate) {
+
+    public String updateDiscount(String code, int articleNumber, int newPercentage, String fromDate, String toDate) {
         String sql = "SELECT update_discount_for_product(?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, code);
-            ps.setInt(2, productID);
+            ps.setInt(2, articleNumber);
             ps.setInt(3, newPercentage);
-            ps.setDate(4, java.sql.Date.valueOf(fromDate));
-            ps.setDate(5, java.sql.Date.valueOf(toDate));
+            ps.setDate(4, Date.valueOf(fromDate));
+            ps.setDate(5, Date.valueOf(toDate));
 
             ResultSet rs = ps.executeQuery();
             rs.next();
@@ -223,10 +267,12 @@ public class ProductDAO {
         try (PreparedStatement psStmt = conn.prepareStatement(sql);
              ResultSet rs = psStmt.executeQuery()) {
 
-            System.out.printf("%-8s %-12s %-20s %-15s %-8s %-8s%n", "Pr_Su_ID", "Article#", "Product", "Supplier", "Price", "Stock");
+            System.out.printf("\n%-8s %-12s %-35s %-25s %-10s %-8s%n",
+                    "Pr_Su_ID", "Article#", "Product", "Supplier", "Price", "Stock");
+            System.out.println("-------------------------------------------------------------------------------");
 
             while (rs.next()) {
-                System.out.printf("%-8d %-12d %-20s %-15s %-8d %-8d%n",
+                System.out.printf("%-8d %-12d %-35s %-25s %-10d %-8d%n",
                         rs.getInt("Pr_Su_ID"),
                         rs.getInt("ps_article"),
                         rs.getString("product_name"),
@@ -237,24 +283,28 @@ public class ProductDAO {
             }
         }
     }
+
     public void showCurrentDiscounts() {
         String sql = "SELECT * FROM get_current_discounts()";
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
-            System.out.printf("%-20s %-15s %-10s %-10s %-10s %-15s\n",
-                    "Product", "Supplier", "Code", "Discount", "Price", "Discounted Price");
+            System.out.printf(
+                    "%-35s %-18s %-10s %-10s %-15s %-15s%n",
+                    "Product", "Supplier", "Code", "Discount", "Price", "Discounted Price"
+            );
+            System.out.println("---------------------------------------------------------------------------------------------------------");
 
             while (rs.next()) {
-                String product = rs.getString("product_name");
+                String name = rs.getString("product_name");
                 String supplier = rs.getString("supplier_name");
                 String code = rs.getString("code");
                 int discount = rs.getInt("discount_percentage");
                 int price = rs.getInt("price");
                 int discountedPrice = rs.getInt("discounted_price");
 
-                System.out.printf("%-20s %-15s %-10s %-10d %-10d %-15d\n",
-                        product, supplier, code, discount, price, discountedPrice);
+                System.out.printf("%-35s %-18s %-10s %-10d %-15d %-15d%n",
+                        name, supplier, code, discount, price, discountedPrice);
             }
         } catch (SQLException e) {
             System.out.println("Error showing current discounts: " + e.getMessage());

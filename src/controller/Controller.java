@@ -6,6 +6,7 @@ import entity.ProductDAO;
 import entity.OrderDAO;
 import entity.CustomerDAO;
 
+
 public class Controller {
 
     private Menu menu = new Menu();
@@ -182,8 +183,8 @@ public class Controller {
                     break;
 
                 case 9:
-                    String searchWord = menu.readString("Enter product name, article number or supplier: ");
-                    productDAO.searchProductsAdvanced(searchWord);
+                    String searchterm = menu.readString("Enter product name, article number or supplier: ");
+                    productDAO.searchProducts(searchterm);
                     break;
 
                 case 10:
@@ -201,12 +202,13 @@ public class Controller {
 
                 case 12:
                     productDAO.showAllProductsBySupplier();
-                    int prSuID = menu.readInt("Enter Pr_Su_ID of product to apply discount: ");
-                    String assignCode = menu.readString("Discount code to assign: ");
-                    String fromDate = menu.readString("Start date (YYYY-MM-DD): ");
-                    String toDate = menu.readString("End date (YYYY-MM-DD): ");
-                    String assignResult = productDAO.assignDiscount(assignCode, prSuID, fromDate, toDate);
-                    System.out.println(assignResult);
+                    String articleInput = menu.readString("Article number of product to assign discount: ");
+                    int articleNum = Integer.parseInt(articleInput);
+                    String dCode = menu.readString("Discount code to assign: ");
+                    String from = menu.readString("Start date (YYYY-MM-DD): ");
+                    String to = menu.readString("End date (YYYY-MM-DD): ");
+
+                    System.out.println(productDAO.assignDiscount(articleNum, dCode, from, to));
                     break;
 
                 case 13:
@@ -215,7 +217,7 @@ public class Controller {
 
                 case 14:
                     String updCode = menu.readString("Discount code to update: ");
-                    int updProductID = menu.readInt("Product ID: ");
+                    int updProductID = menu.readInt("Article number: ");
                     int newPercentage = menu.readInt("New discount percentage (0-100): ");
                     String newFromDate = menu.readString("New start date (YYYY-MM-DD): ");
                     String newToDate = menu.readString("New end date (YYYY-MM-DD): ");
