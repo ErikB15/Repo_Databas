@@ -1,7 +1,7 @@
 package controller;
 
 /**
- * Tror faktiskt alla krav är uppfyllda, läs igenom allt, suuuper noga. sen läs igenom krav igen, döreftfer se om du kan snygga till outprints och felsök en massa.
+* kolla igenom databas, lör dig den opch ta bport kommentarer
  */
 
 public class Main {
