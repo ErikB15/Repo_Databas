@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ecf593f1-482d-43f3-8dd5-22c643449705" name="Changes" comment="allt fixart nu">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entity/OrderDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/OrderDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entity/ProductDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/ProductDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entity/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/UserDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +97,14 @@
       <workItem from="1766405160203" duration="69000" />
       <workItem from="1766775061256" duration="5264000" />
       <workItem from="1766838876406" duration="15087000" />
-      <workItem from="1766930428851" duration="16931000" />
+      <workItem from="1766930428851" duration="16956000" />
+      <workItem from="1767026473091" duration="10000" />
+      <workItem from="1767045777132" duration="111000" />
+      <workItem from="1767111611057" duration="138000" />
+      <workItem from="1767111757568" duration="119000" />
+      <workItem from="1767190744780" duration="9000" />
+      <workItem from="1767274049105" duration="1035000" />
+      <workItem from="1768210115781" duration="7936000" />
     </task>
     <task id="LOCAL−00001" summary="utvecklat databas projektet mer med funktioner och liknannde">
       <option name="closed" value="true" />
@@ -174,7 +183,14 @@
       <option name="presentableId" value="LOCAL−00011" />
       <updated>1766969505839</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL−00012" summary="allt fixart nu">
+      <option name="closed" value="true" />
+      <created>1766969970852</created>
+      <option name="number" value="LOCAL−00012" />
+      <option name="presentableId" value="LOCAL−00012" />
+      <updated>1766969970852</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

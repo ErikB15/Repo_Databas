@@ -110,8 +110,8 @@ public class ProductDAO {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, supplierName);
             ps.setString(2, phoneNumber);
-            ps.setString(3, address);
-            ps.setInt(4, supplierID);
+            ps.setInt(3, supplierID);
+            ps.setString(4, address);
             ps.execute();
         }
         System.out.println("Supplier added successfully!");

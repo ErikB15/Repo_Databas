@@ -28,8 +28,6 @@ public class OrderDAO {
         }
     }
 
-
-
     public void showUserOrders(int customerID) throws SQLException {
         String sql = "SELECT o.OrderID, o.order_status, p.name AS product_name, ps.name_supplier, oi.amount, o.order_date " +
                 "FROM CustomerOrder o " +
@@ -41,7 +39,7 @@ public class OrderDAO {
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, customerID);
- try (ResultSet rs = ps.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     System.out.println("OrderID: " + rs.getInt("OrderID")
                             + ", Status: " + rs.getString("order_status")
@@ -53,18 +51,20 @@ public class OrderDAO {
             }
         }
     }
+
     public String addToCart(int customerID, int productID, int amount) {
         String sql = "SELECT add_to_cart(?, ?, ?)";
-
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, customerID);
             ps.setInt(2, productID);
             ps.setInt(3, amount);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getString(1);
-            } else {
-                return "Error: Could not add product to cart.";
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString(1);
+                } else {
+                    return "Error: Could not add product to cart.";
+                }
             }
         } catch (SQLException e) {
             return "Error: " + e.getMessage();
@@ -73,7 +73,6 @@ public class OrderDAO {
 
     public void showCart(int customerID) {
         String sql = "SELECT * FROM get_cart_details(?)";
-
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, customerID);
             try (ResultSet rs = ps.executeQuery()) {
@@ -113,23 +112,20 @@ public class OrderDAO {
 
     public String handleOrder(int orderID, boolean approve) {
         String sql = approve ? "SELECT approve_order(?)" : "SELECT reject_order(?)";
-
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderID);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                String result = rs.getString(1);
-                rs.close();
-                return result;
-            } else {
-                rs.close();
-                return "No result returned from database.";
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString(1);
+                } else {
+                    return "No result returned from database.";
+                }
             }
         } catch (SQLException e) {
             return "Error handling order: " + e.getMessage();
         }
     }
+
     public void maxOrders() {
         String sql = "SELECT * FROM get_top_products_per_month()";
         try (PreparedStatement ps = conn.prepareStatement(sql);
@@ -148,43 +144,64 @@ public class OrderDAO {
             System.out.println("Error, try again: " + e.getMessage());
         }
     }
+
     public String confirmCheckout(int customerID) {
         String sql = "UPDATE CustomerOrder " +
                 "SET order_status = 'Pending' " +
                 "WHERE customerID = ? AND order_status = 'Cart' " +
                 "RETURNING orderID";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, customerID);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                int orderID = rs.getInt("orderID");
-                return "Order placed! OrderID: " + orderID + ". Waiting for admin approval.";
-            } else {
-                return "No active cart found.";
+
+        try {
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, customerID);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    int orderID = rs.getInt("orderID");
+                    conn.commit();
+                    return "Order placed! OrderID: " + orderID + ". Waiting for admin approval.";
+                } else {
+                    conn.rollback();
+                    return "No active cart found.";
+                }
+            } catch (SQLException e) {
+                conn.rollback();
+                return "Error confirming order: " + e.getMessage();
+            } finally {
+                conn.setAutoCommit(true);
             }
         } catch (SQLException e) {
-            return "Error confirming order: " + e.getMessage();
+            return "Transaction error: " + e.getMessage();
         }
     }
 
-
     public String cancelCart(int customerID) {
-        String sql1 = "DELETE FROM order_item WHERE orderID IN " +
-                "(SELECT orderID FROM CustomerOrder WHERE customerID = ? AND order_status = 'Cart')";
-        String sql2 = "DELETE FROM CustomerOrder WHERE customerID = ? AND order_status = 'Cart'";
+        String sql = "UPDATE CustomerOrder SET order_status = 'Cancelled' " +
+                "WHERE customerID = ? AND order_status = 'Cart' " +
+                "RETURNING orderID";
 
-        try (PreparedStatement ps1 = conn.prepareStatement(sql1);
-             PreparedStatement ps2 = conn.prepareStatement(sql2)) {
+        try {
+            conn.setAutoCommit(false);
 
-            ps1.setInt(1, customerID);
-            ps1.executeUpdate();
-
-            ps2.setInt(1, customerID);
-            ps2.executeUpdate();
-
-            return "Cart cancelled.";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, customerID);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    conn.commit();
+                    return "Cart cancelled.";
+                } else {
+                    conn.rollback();
+                    return "No active cart to cancel.";
+                }
+            } catch (SQLException e) {
+                conn.rollback();
+                return "Error cancelling cart: " + e.getMessage();
+            } finally {
+                conn.setAutoCommit(true);
+            }
         } catch (SQLException e) {
-            return "Error cancelling cart: " + e.getMessage();
+            return "Transaction error: " + e.getMessage();
         }
     }
 }
